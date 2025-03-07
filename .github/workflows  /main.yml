@@ -23,34 +23,4 @@ jobs:
     steps:
       - name: Configurar Git
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-
-      - name: Clonar el repositorio de certificación
-        run: |
-          git clone --branch feature https://x-access-token:${{ secrets.GH_TOKEN_DESTINATION_REPOSITORY }}@github.com/${{ inputs.destination_organization }}/${{ inputs.destination_repository }}.git cert_repo
-          cd cert_repo
-
-          # Agregar el repositorio de desarrollo como remoto
-          git remote add dev_repo https://x-access-token:${{ secrets.GH_TOKEN_DESTINATION_REPOSITORY }}@github.com/${{ inputs.origin_organization }}/${{ inputs.origin_repository }}.git
-
-          # Obtener los últimos cambios de desarrollo
-          git fetch dev_repo feature
-
-          # Fusionar los cambios de feature de desarrollo en feature de certificación
-          git merge --no-edit dev_repo/feature || echo "No hay cambios para fusionar"
-
-          # Subir los cambios a feature de certificación
-          git push origin feature
-
-      - name: Crear PR en certificación de feature → main
-        run: |
-          curl -X POST -H "Authorization: token ${{ secrets.GH_TOKEN_DESTINATION_REPOSITORY }}" \
-               -H "Accept: application/vnd.github.v3+json" \
-               https://api.github.com/repos/${{ inputs.destination_organization }}/${{ inputs.destination_repository }}/pulls \
-               -d '{
-                 "title": "Sync feature → main",
-                 "head": "feature",
-                 "base": "main",
-                 "body": "Merge automático desde desarrollo"
-               }'
+          pwd
