@@ -1,26 +1,27 @@
+name: Reusable Workflow
+
 on:
   workflow_call:
     inputs:
-      origin_organization:
+      message:
+        description: "Mensaje de entrada"
+        required: true
         type: string
-        required: false
-      destination_organization:
-        type: string
-        required: false
-      origin_repository:
-        type: string
-        required: false
-      destination_repository:
-        type: string
-        required: false
+      number:
+        description: "Número de entrada"
+        required: true
+        type: number
     secrets:
-      GH_TOKEN_DESTINATION_REPOSITORY:
+      MY_SECRET:
+        description: "Secreto para usar en el workflow"
         required: true
 
 jobs:
-  sync-feature:
+  reusable-job:
     runs-on: ubuntu-latest
     steps:
-      - name: Configurar Git
+      - name: Mostrar parámetros y secreto
         run: |
-          pwd
+          echo "Mensaje: ${{ inputs.message }}"
+          echo "Número: ${{ inputs.number }}"
+          echo "Secreto: ${{ secrets.MY_SECRET }}"
